@@ -14,9 +14,29 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  fullname   String
-  email      String   @unique
-  password   String
+  id                   Int                  @id @default(autoincrement())
+  fullname             String
+  email                String               @unique
+  password             String
+  createdAt            DateTime             @default(now())
+  account              Account?
+  transactionHistories TransactionHistory[]
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  balance   Int      @default(10000)
+  createdAt DateTime @default(now())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model TransactionHistory {
+  id         Int      @id @default(autoincrement())
+  sender     Int
+  reciever   Int
+  amount     Int
   created_At DateTime @default(now())
+  userId     Int      @unique
+  user       User     @relation(fields: [userId], references: [id])
 }
